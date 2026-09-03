@@ -1,53 +1,40 @@
 import { NextResponse } from 'next/server';
-import { v4 as uuidv4 } from 'uuid';
-import { getDb } from '@/lib/db';
-import { requireAuth } from '@/lib/auth';
+import { getSupabase, throwIfDbError } from '@/lib/supabase';
+import { requireAuth, requireRole } from '@/lib/auth';
+
+const taskSelect = '*, assignee:users!tasks_assignee_id_fkey(name, avatar_color)';
+const taskResponse = (task) => task && ({ ...task, assignee_name: task.assignee?.name ?? null, assignee_color: task.assignee?.avatar_color ?? null, assignee: undefined });
 
 export async function GET(request) {
   const user = await requireAuth();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
   const { searchParams } = new URL(request.url);
-  const sprintId = searchParams.get('sprint_id');
-  const status = searchParams.get('status');
-  const assigneeId = searchParams.get('assignee_id');
-
-  const db = getDb();
-  let query = 'SELECT t.*, u.name as assignee_name, u.avatar_color as assignee_color FROM tasks t LEFT JOIN users u ON t.assignee_id = u.id';
-  const conditions = [];
-  const params = [];
-
-  if (sprintId) { conditions.push('t.sprint_id = ?'); params.push(sprintId); }
-  if (status) { conditions.push('t.status = ?'); params.push(status); }
-  if (assigneeId) { conditions.push('t.assignee_id = ?'); params.push(assigneeId); }
-
-  // Members only see their own tasks or all tasks for viewing
-  if (conditions.length > 0) query += ' WHERE ' + conditions.join(' AND ');
-  query += ' ORDER BY t.created_at DESC';
-
-  const tasks = db.prepare(query).all(...params);
-  return NextResponse.json({ tasks });
+  let query = getSupabase().from('tasks').select(taskSelect).order('created_at', { ascending: false });
+  for (const [key, column] of [['sprint_id', 'sprint_id'], ['status', 'status'], ['assignee_id', 'assignee_id']]) {
+    const value = searchParams.get(key);
+    if (value) query = query.eq(column, value);
+  }
+  const { data: tasks, error } = await query;
+  throwIfDbError(error);
+  return NextResponse.json({ tasks: tasks.map(taskResponse) });
 }
 
 export async function POST(request) {
-  const user = await requireAuth();
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
+  const user = await requireRole(['admin', 'scrum_master', 'product_owner']);
+  if (!user) return NextResponse.json({ error: 'Permission denied' }, { status: 403 });
   const body = await request.json();
-  if (!body.title) return NextResponse.json({ error: 'Title required' }, { status: 400 });
-
-  const db = getDb();
-
-  let sprintId = body.sprint_id;
+  if (!body.title?.trim()) return NextResponse.json({ error: 'Title required' }, { status: 400 });
+  const supabase = getSupabase();
+  let sprintId = body.sprint_id || null;
   if (!sprintId) {
-    const activeSprint = db.prepare('SELECT id FROM sprints WHERE active = 1 LIMIT 1').get();
-    sprintId = activeSprint ? activeSprint.id : null;
+    const { data: activeSprint, error } = await supabase.from('sprints').select('id').eq('active', true).maybeSingle();
+    throwIfDbError(error);
+    sprintId = activeSprint?.id || null;
   }
-
-  const id = uuidv4();
-  db.prepare('INSERT INTO tasks (id, sprint_id, title, description, points, status, priority, assignee_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
-    .run(id, sprintId, body.title, body.description || '', body.points || 0, body.status || 'todo', body.priority || 'medium', body.assignee_id || null);
-
-  const task = db.prepare('SELECT t.*, u.name as assignee_name, u.avatar_color as assignee_color FROM tasks t LEFT JOIN users u ON t.assignee_id = u.id WHERE t.id = ?').get(id);
-  return NextResponse.json({ task }, { status: 201 });
+  const { data: task, error } = await supabase.from('tasks').insert({
+    sprint_id: sprintId, title: body.title.trim(), description: body.description || '', points: Number(body.points) || 0,
+    status: body.status || 'todo', priority: body.priority || 'medium', assignee_id: body.assignee_id || null
+  }).select(taskSelect).single();
+  throwIfDbError(error);
+  return NextResponse.json({ task: taskResponse(task) }, { status: 201 });
 }

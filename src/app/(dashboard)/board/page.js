@@ -73,7 +73,7 @@ export default function BoardPage() {
           <h1 className={styles.pageTitle}>Sprint Board</h1>
           <p className={styles.pageSubtitle}>{filtered.length} tasks</p>
         </div>
-        <button className="btn btn-primary" onClick={openAdd}>+ Add Task</button>
+        {canManage && <button className="btn btn-primary" onClick={openAdd}>+ Add Task</button>}
       </div>
 
       {/* Filters */}
@@ -108,8 +108,8 @@ export default function BoardPage() {
                 {colTasks.map(task => {
                   const assignee = task.assignee_id ? team.find(m => m.id === task.assignee_id) : null;
                   return (
-                    <div key={task.id} draggable style={{ background: 'var(--bg-root)', border: '1px solid var(--border-subtle)', borderRadius: 10, padding: '10px 14px', cursor: 'grab', transition: 'all 150ms', userSelect: 'none' }}
-                      onDragStart={e => onDragStart(e, task.id)} onClick={() => openEdit(task)}>
+                    <div key={task.id} draggable={canManage || task.assignee_id === user?.id} style={{ background: 'var(--bg-root)', border: '1px solid var(--border-subtle)', borderRadius: 10, padding: '10px 14px', cursor: canManage || task.assignee_id === user?.id ? 'grab' : 'default', transition: 'all 150ms', userSelect: 'none' }}
+                      onDragStart={e => onDragStart(e, task.id)} onClick={() => canManage && openEdit(task)}>
                       <div style={{ fontWeight: 600, fontSize: 14, color: 'var(--text-primary)', marginBottom: 8 }}>{task.title}</div>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>

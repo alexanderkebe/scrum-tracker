@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { getSupabase, throwIfDbError } from '@/lib/supabase';
 import { verifyPassword, createSession } from '@/lib/auth';
 
 export async function POST(request) {
@@ -10,8 +10,9 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
-    const db = getDb();
-    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email.toLowerCase().trim());
+    const { data: user, error } = await getSupabase().from('users').select('*')
+      .eq('email', email.toLowerCase().trim()).maybeSingle();
+    throwIfDbError(error);
 
     if (!user || !verifyPassword(password, user.password_hash)) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });

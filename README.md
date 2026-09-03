@@ -42,7 +42,7 @@ An enterprise-grade, full-stack Scrum Meeting Tracker web application tailored f
 ## 🛠️ Tech Stack
 
 - **Framework**: [Next.js](https://nextjs.org/) (App Router, Server Actions / API Routes)
-- **Database**: [SQLite](https://sqlite.org/) via `better-sqlite3` (Zero-config embedded database, auto-migrated and auto-seeded on first run)
+- **Database**: [Supabase](https://supabase.com/) Postgres, managed through versioned SQL migrations
 - **Authentication**: HTTP-only secure cookie session management with `bcryptjs`
 - **Styling**: Vanilla CSS Modules with custom design tokens
 
@@ -74,18 +74,22 @@ An enterprise-grade, full-stack Scrum Meeting Tracker web application tailored f
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+### Supabase and Vercel setup
+
+The app requires Supabase for durable production data. SQLite files do not persist safely in Vercel serverless functions.
+
+1. Create a Supabase project, then run [`supabase/migrations/20260903000000_create_scrum_tracker.sql`](supabase/migrations/20260903000000_create_scrum_tracker.sql) in its SQL Editor (or run `supabase db push` after linking the project with the Supabase CLI).
+2. Copy `.env.example` to `.env.local` and fill in the project URL, secret key, and your `INITIAL_ADMIN_EMAIL`.
+3. Add the same three variables to Vercel for **Production**, then redeploy. Do not expose `SUPABASE_SECRET_KEY` in client code.
+4. Register the `INITIAL_ADMIN_EMAIL` account first. It becomes the workspace admin; every other new account starts as a Team Member.
+
+The project uses the Supabase secret key only from server-side route handlers. Row Level Security is enabled on every table, so the browser cannot call the database directly.
+
 ---
 
 ## 🔑 Pre-Seeded Demo Accounts
 
-The database auto-seeds with the following accounts on first launch:
-
-| Role | Email | Password | Responsibilities |
-|---|---|---|---|
-| **Admin / Manager** | `admin@systemedge.com` | `admin123` | Full access, user roster & role assignment, org settings |
-| **Product Owner (PO)** | `po@systemedge.com` | `password123` | Backlog ownership, sprint goals, sprint planning & review ceremonies |
-| **Scrum Master (SM)** | `sarah@systemedge.com` | `password123` | Ceremony facilitator, live meeting timer, blocker resolution |
-| **Team Member** | `alex@systemedge.com` | `password123` | Sprint execution, kanban task transitions, stand-up sync |
+Set `INITIAL_ADMIN_EMAIL` before registering. The first account registered with that exact email becomes the workspace admin. This replaces the insecure public demo accounts previously seeded into production.
 
 ---
 

@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { v4 as uuidv4 } from 'uuid';
-import { getDb } from '@/lib/db';
+import { getSupabase, throwIfDbError } from '@/lib/supabase';
 import { hashPassword, createSession } from '@/lib/auth';
 
 export async function POST(request) {
@@ -15,23 +14,34 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 });
     }
 
-    const db = getDb();
-    const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(email.toLowerCase().trim());
+    const supabase = getSupabase();
+    const normalizedEmail = email.toLowerCase().trim();
+    const { data: existing, error: existingError } = await supabase.from('users').select('id')
+      .eq('email', normalizedEmail).maybeSingle();
+    throwIfDbError(existingError);
 
     if (existing) {
       return NextResponse.json({ error: 'Email already registered' }, { status: 409 });
     }
 
-    const userId = uuidv4();
     const passwordHash = hashPassword(password);
+    const { count, error: countError } = await supabase.from('users').select('*', { count: 'exact', head: true });
+    throwIfDbError(countError);
+    const isInitialAdmin = Boolean(process.env.INITIAL_ADMIN_EMAIL)
+      && normalizedEmail === process.env.INITIAL_ADMIN_EMAIL.toLowerCase().trim()
+      && count === 0;
+    const role = isInitialAdmin ? 'admin' : 'member';
 
-    db.prepare('INSERT INTO users (id, email, name, password_hash, role, avatar_color) VALUES (?, ?, ?, ?, ?, ?)')
-      .run(userId, email.toLowerCase().trim(), name.trim(), passwordHash, 'member', Math.floor(Math.random() * 15));
+    const { data: user, error: insertError } = await supabase.from('users').insert({
+      email: normalizedEmail, name: name.trim(), password_hash: passwordHash, role,
+      avatar_color: Math.floor(Math.random() * 15)
+    }).select('id, email, name, role, avatar_color').single();
+    throwIfDbError(insertError);
 
-    await createSession(userId);
+    await createSession(user.id);
 
     return NextResponse.json({
-      user: { id: userId, email: email.toLowerCase().trim(), name: name.trim(), role: 'member' }
+      user
     }, { status: 201 });
   } catch (error) {
     console.error('Register error:', error);

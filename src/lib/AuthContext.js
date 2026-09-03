@@ -19,7 +19,10 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  useEffect(() => { fetchUser(); }, [fetchUser]);
+  useEffect(() => {
+    const timeoutId = setTimeout(fetchUser, 0);
+    return () => clearTimeout(timeoutId);
+  }, [fetchUser]);
 
   const login = async (email, password) => {
     try {
