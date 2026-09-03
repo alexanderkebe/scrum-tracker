@@ -60,7 +60,7 @@ export default function DashboardPage() {
   const sprint = data.sprint;
   const progress = sprint ? sprintProgress(sprint) : 0;
   const days = sprint ? daysRemaining(sprint.end_date) : 0;
-  const canManage = user.role === 'admin' || user.role === 'scrum_master';
+  const canManage = user.role === 'admin' || user.role === 'scrum_master' || user.role === 'product_owner';
 
   // Calculate team average attendance
   const avgAttendance = data.team.attendance?.length > 0

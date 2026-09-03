@@ -64,7 +64,7 @@ export default function BoardPage() {
     setShowModal(false); loadData();
   };
 
-  const canManage = user?.role === 'admin' || user?.role === 'scrum_master';
+  const canManage = user?.role === 'admin' || user?.role === 'scrum_master' || user?.role === 'product_owner';
 
   return (
     <div className={styles.page}>

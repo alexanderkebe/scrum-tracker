@@ -72,7 +72,8 @@ export default function TeamPage() {
                 >
                   <option value="member">Team Member</option>
                   <option value="scrum_master">Scrum Master</option>
-                  <option value="admin">Admin</option>
+                  <option value="product_owner">Product Owner</option>
+                  <option value="admin">Admin / Manager</option>
                 </select>
                 {user.id !== m.id && (
                   <button className="btn btn-sm btn-ghost text-danger" onClick={() => handleDelete(m.id)} title="Remove user">

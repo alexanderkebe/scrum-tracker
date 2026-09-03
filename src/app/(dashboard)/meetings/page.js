@@ -26,7 +26,7 @@ export default function MeetingsPage() {
     return true;
   });
 
-  const canCreate = user?.role === 'admin' || user?.role === 'scrum_master';
+  const canCreate = user?.role === 'admin' || user?.role === 'scrum_master' || user?.role === 'product_owner';
 
   return (
     <div className={styles.page}>

@@ -36,7 +36,7 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const user = await requireRole(['admin', 'scrum_master']);
+  const user = await requireRole(['admin', 'scrum_master', 'product_owner']);
   if (!user) return NextResponse.json({ error: 'Permission denied' }, { status: 403 });
 
   const body = await request.json();

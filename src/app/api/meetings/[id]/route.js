@@ -24,7 +24,7 @@ export async function GET(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const user = await requireRole(['admin', 'scrum_master']);
+  const user = await requireRole(['admin', 'scrum_master', 'product_owner']);
   if (!user) return NextResponse.json({ error: 'Permission denied' }, { status: 403 });
 
   const { id } = await params;

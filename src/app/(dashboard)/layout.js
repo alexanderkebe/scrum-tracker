@@ -32,12 +32,12 @@ export default function DashboardLayout({ children }) {
   if (!user) return null;
 
   const navItems = [
-    { path: '/', label: 'Dashboard', icon: '🏠', roles: ['admin', 'scrum_master', 'member'] },
-    { path: '/meetings', label: 'Meetings', icon: '📋', roles: ['admin', 'scrum_master', 'member'] },
-    { path: '/board', label: 'Sprint Board', icon: '📊', roles: ['admin', 'scrum_master', 'member'] },
-    { path: '/team', label: 'Team', icon: '👥', roles: ['admin'] },
-    { path: '/analytics', label: 'Analytics', icon: '📈', roles: ['admin', 'scrum_master'] },
-    { path: '/profile', label: 'My Profile', icon: '👤', roles: ['admin', 'scrum_master', 'member'] },
+    { path: '/', label: 'Dashboard', icon: '🏠', roles: ['admin', 'product_owner', 'scrum_master', 'member'] },
+    { path: '/meetings', label: 'Meetings', icon: '📋', roles: ['admin', 'product_owner', 'scrum_master', 'member'] },
+    { path: '/board', label: 'Sprint Board', icon: '📊', roles: ['admin', 'product_owner', 'scrum_master', 'member'] },
+    { path: '/team', label: 'Team', icon: '👥', roles: ['admin', 'product_owner'] },
+    { path: '/analytics', label: 'Analytics', icon: '📈', roles: ['admin', 'product_owner', 'scrum_master'] },
+    { path: '/profile', label: 'My Profile', icon: '👤', roles: ['admin', 'product_owner', 'scrum_master', 'member'] },
     { path: '/settings', label: 'Settings', icon: '⚙️', roles: ['admin'] },
   ];
 

@@ -50,12 +50,22 @@ export function meetingTypeInfo(type) {
 }
 
 export function roleLabel(role) {
-  const labels = { admin: 'Admin', scrum_master: 'Scrum Master', member: 'Team Member' };
+  const labels = {
+    admin: 'Admin / Manager',
+    product_owner: 'Product Owner',
+    scrum_master: 'Scrum Master',
+    member: 'Team Member'
+  };
   return labels[role] || role;
 }
 
 export function roleBadge(role) {
-  const badges = { admin: 'badge-danger', scrum_master: 'badge-teal', member: 'badge-info' };
+  const badges = {
+    admin: 'badge-danger',
+    product_owner: 'badge-warning',
+    scrum_master: 'badge-teal',
+    member: 'badge-info'
+  };
   return badges[role] || 'badge-neutral';
 }
 

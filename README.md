@@ -80,12 +80,12 @@ An enterprise-grade, full-stack Scrum Meeting Tracker web application tailored f
 
 The database auto-seeds with the following accounts on first launch:
 
-| Role | Email | Password |
-|---|---|---|
-| **Admin / Manager** | `admin@systemedge.com` | `admin123` |
-| **Scrum Master** | `sarah@systemedge.com` | `password123` |
-| **Team Member** | `alex@systemedge.com` | `password123` |
-| **Team Member** | `marcus@systemedge.com` | `password123` |
+| Role | Email | Password | Responsibilities |
+|---|---|---|---|
+| **Admin / Manager** | `admin@systemedge.com` | `admin123` | Full access, user roster & role assignment, org settings |
+| **Product Owner (PO)** | `po@systemedge.com` | `password123` | Backlog ownership, sprint goals, sprint planning & review ceremonies |
+| **Scrum Master (SM)** | `sarah@systemedge.com` | `password123` | Ceremony facilitator, live meeting timer, blocker resolution |
+| **Team Member** | `alex@systemedge.com` | `password123` | Sprint execution, kanban task transitions, stand-up sync |
 
 ---
 

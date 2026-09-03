@@ -18,7 +18,7 @@ export async function PATCH(request) {
   const { userId, role } = await request.json();
   if (!userId || !role) return NextResponse.json({ error: 'userId and role required' }, { status: 400 });
 
-  const validRoles = ['admin', 'scrum_master', 'member'];
+  const validRoles = ['admin', 'product_owner', 'scrum_master', 'member'];
   if (!validRoles.includes(role)) return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
 
   const db = getDb();

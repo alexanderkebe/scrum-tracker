@@ -119,7 +119,7 @@ function seedIfEmpty(db) {
   // Demo team
   const team = [
     { name: 'Sarah Chen', role: 'scrum_master', email: 'sarah@systemedge.com', color: 1 },
-    { name: 'Marcus Johnson', role: 'member', email: 'marcus@systemedge.com', color: 2 },
+    { name: 'Marcus Johnson', role: 'product_owner', email: 'po@systemedge.com', color: 2 },
     { name: 'Alex Rivera', role: 'member', email: 'alex@systemedge.com', color: 3 },
     { name: 'Priya Sharma', role: 'member', email: 'priya@systemedge.com', color: 4 },
     { name: 'Tom Wilson', role: 'member', email: 'tom@systemedge.com', color: 5 },
