@@ -1,17 +1,42 @@
 import Database from 'better-sqlite3';
+import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
 
-const DB_PATH = path.join(process.cwd(), 'scrum-tracker.db');
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+
+function getDatabasePath() {
+  if (isServerless) {
+    const tmpPath = path.join('/tmp', 'scrum-tracker.db');
+    if (!fs.existsSync(tmpPath)) {
+      const bundled = path.join(process.cwd(), 'scrum-tracker.db');
+      if (fs.existsSync(bundled)) {
+        try {
+          fs.copyFileSync(bundled, tmpPath);
+        } catch (err) {
+          console.warn('Could not copy bundled db to /tmp, will initialize fresh:', err);
+        }
+      }
+    }
+    return tmpPath;
+  }
+  return path.join(process.cwd(), 'scrum-tracker.db');
+}
 
 let _db = null;
 
 export function getDb() {
   if (_db) return _db;
 
-  _db = new Database(DB_PATH);
-  _db.pragma('journal_mode = WAL');
+  const dbPath = getDatabasePath();
+  _db = new Database(dbPath);
+
+  if (isServerless) {
+    _db.pragma('journal_mode = DELETE');
+  } else {
+    _db.pragma('journal_mode = WAL');
+  }
   _db.pragma('foreign_keys = ON');
 
   initSchema(_db);

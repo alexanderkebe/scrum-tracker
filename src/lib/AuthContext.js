@@ -22,27 +22,45 @@ export function AuthProvider({ children }) {
   useEffect(() => { fetchUser(); }, [fetchUser]);
 
   const login = async (email, password) => {
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error);
-    setUser(data.user);
-    return data.user;
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error(`Server returned HTTP ${res.status}`);
+      }
+      if (!res.ok) throw new Error(data.error || 'Login failed');
+      setUser(data.user);
+      return data.user;
+    } catch (err) {
+      throw new Error(err.message || 'Unable to connect to authentication service');
+    }
   };
 
   const register = async (name, email, password) => {
-    const res = await fetch('/api/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error);
-    setUser(data.user);
-    return data.user;
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error(`Server returned HTTP ${res.status}`);
+      }
+      if (!res.ok) throw new Error(data.error || 'Registration failed');
+      setUser(data.user);
+      return data.user;
+    } catch (err) {
+      throw new Error(err.message || 'Unable to connect to registration service');
+    }
   };
 
   const logout = async () => {
