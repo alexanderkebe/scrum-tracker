@@ -27,18 +27,20 @@
 }
 
 .sidebarLogoWrapper {
-  background: transparent;
-  padding: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 8px 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
   transition: all 150ms ease;
 }
 
 .sidebarLogoImg {
   width: 100%;
-  height: 52px;
+  height: 46px;
   object-fit: contain;
   display: block;
 }
@@ -397,7 +399,7 @@
 @media (max-width: 1024px) {
   .sidebar { width: 72px; }
   .sidebarBrand, .navItem span:not(.navIcon), .navLabel, .userMeta, .sidebarTrackerBadge { display: none; }
-  .sidebarLogoWrapper { width: 44px; height: 44px; padding: 0; background: transparent; margin: 0 auto; }
+  .sidebarLogoWrapper { width: 44px; height: 44px; padding: 6px; background: #ffffff; border-radius: 10px; margin: 0 auto; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); }
   .sidebarLogoImg { display: none; }
   .sidebarIconImg { display: block; width: 100%; height: 100%; object-fit: contain; }
   .sidebarHeader { justify-content: center; padding: 14px 8px; }

@@ -20,8 +20,8 @@ export default function DashboardLayout({ children }) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'var(--bg-root)' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ margin: '0 auto 16px', display: 'inline-flex' }}>
-            <img src="/light-mode-logo.png" alt="Systems Edge Solutions" style={{ height: 60, width: 'auto', objectFit: 'contain' }} />
+          <div style={{ background: '#ffffff', padding: '12px 24px', borderRadius: 14, margin: '0 auto 16px', display: 'inline-flex', boxShadow: '0 8px 24px rgba(0,0,0,0.1)' }}>
+            <img src="/light-mode-logo.png" alt="Systems Edge Solutions" style={{ height: 50, width: 'auto', objectFit: 'contain' }} />
           </div>
           <p style={{ color: 'var(--text-muted)' }}>Loading...</p>
         </div>
