@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
 import { getAvatarColor, getInitials, roleLabel } from '@/lib/utils';
+import { BRAND_LOGOS } from '@/lib/logos';
 import styles from './dashboard.module.css';
 
 export default function DashboardLayout({ children }) {
@@ -21,7 +22,7 @@ export default function DashboardLayout({ children }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'var(--bg-root)' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ background: '#ffffff', padding: '12px 24px', borderRadius: 14, margin: '0 auto 16px', display: 'inline-flex', boxShadow: '0 8px 24px rgba(0,0,0,0.1)' }}>
-            <img src="/light-mode-logo.png" alt="Systems Edge Solutions" style={{ height: 50, width: 'auto', objectFit: 'contain' }} />
+            <img src={BRAND_LOGOS.onLight.full} alt="Systems Edge Solutions" style={{ height: 50, width: 'auto', objectFit: 'contain' }} />
           </div>
           <p style={{ color: 'var(--text-muted)' }}>Loading...</p>
         </div>
@@ -58,8 +59,8 @@ export default function DashboardLayout({ children }) {
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader} style={{ flexDirection: 'column', alignItems: 'stretch' }}>
           <div className={styles.sidebarLogoWrapper}>
-            <img src="/light-mode-logo.png" alt="Systems Edge Solutions" className={styles.sidebarLogoImg} />
-            <img src="/icon-logo.png" alt="Systems Edge Solutions" className={styles.sidebarIconImg} />
+            <img src={BRAND_LOGOS.onDark.full} alt="Systems Edge Solutions" className={styles.sidebarLogoImg} />
+            <img src={BRAND_LOGOS.onDark.icon} alt="Systems Edge Solutions" className={styles.sidebarIconImg} />
           </div>
           <div className={styles.sidebarTrackerBadge}>Scrum Tracker</div>
         </div>

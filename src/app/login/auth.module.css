@@ -45,15 +45,10 @@
 }
 
 .heroLogoWrapper {
-  background: #ffffff;
-  border-radius: var(--radius-xl);
-  padding: 16px 28px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto var(--sp-6);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.8);
   max-width: 380px;
   width: 100%;
 }

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
+import { BRAND_LOGOS } from '@/lib/logos';
 import styles from './auth.module.css';
 
 export default function LoginPage() {
@@ -31,7 +32,7 @@ export default function LoginPage() {
       <div className={styles.authHero}>
         <div className={styles.heroContent}>
           <div className={styles.heroLogoWrapper}>
-            <img src="/light-mode-logo.png" alt="Systems Edge Solutions" className={styles.heroLogoImg} />
+            <img src={BRAND_LOGOS.onDark.full} alt="Systems Edge Solutions" className={styles.heroLogoImg} />
           </div>
           <p className={styles.heroSubtitle}>Scrum Meeting Tracker</p>
           <div className={styles.heroFeatures}>
@@ -46,7 +47,7 @@ export default function LoginPage() {
       <div className={styles.authForm}>
         <div className={styles.formContainer}>
           <div className={styles.formIconBadge}>
-            <img src="/icon-logo.png" alt="Systems Edge Solutions" className={styles.formIconImg} />
+            <img src={BRAND_LOGOS.onLight.icon} alt="Systems Edge Solutions" className={styles.formIconImg} />
           </div>
           <h2 className={styles.formTitle}>Welcome back</h2>
           <p className={styles.formSubtitle}>Sign in to your account</p>

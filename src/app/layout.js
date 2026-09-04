@@ -5,8 +5,8 @@ export const metadata = {
   title: 'Scrum Tracker — Systems Edge Solutions',
   description: 'Scrum Meeting Tracker for Systems Edge Solutions — Track daily stand-ups, sprint planning, reviews, and retrospectives.',
   icons: {
-    icon: '/icon-logo.png',
-    apple: '/icon-logo.png',
+    icon: '/icon-logo-dark.png',
+    apple: '/icon-logo-dark.png',
   },
 };
 
