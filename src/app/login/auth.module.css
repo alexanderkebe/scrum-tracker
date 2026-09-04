@@ -45,23 +45,37 @@
 }
 
 .heroLogoWrapper {
-  background: #ffffff;
-  border-radius: var(--radius-xl);
-  padding: 14px 24px;
-  display: inline-flex;
+  background: transparent;
+  padding: 0;
+  display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto var(--sp-6);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  max-width: 320px;
+  max-width: 400px;
+  width: 100%;
 }
 
 .heroLogoImg {
   width: 100%;
   height: auto;
-  max-height: 52px;
+  min-height: 72px;
+  max-height: 96px;
   object-fit: contain;
   display: block;
+}
+
+.formIconBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--sp-4);
+}
+
+.formIconImg {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08));
 }
 
 .heroTitle {

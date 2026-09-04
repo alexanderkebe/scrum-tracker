@@ -20,8 +20,8 @@ export default function DashboardLayout({ children }) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'var(--bg-root)' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ background: '#fff', padding: '10px 18px', borderRadius: 12, margin: '0 auto 16px', display: 'inline-flex', boxShadow: '0 4px 16px rgba(0,0,0,0.1)' }}>
-            <img src="/logo.png" alt="Systems Edge Solutions" style={{ height: 36, width: 'auto', objectFit: 'contain' }} />
+          <div style={{ margin: '0 auto 16px', display: 'inline-flex' }}>
+            <img src="/light-mode-logo.png" alt="Systems Edge Solutions" style={{ height: 60, width: 'auto', objectFit: 'contain' }} />
           </div>
           <p style={{ color: 'var(--text-muted)' }}>Loading...</p>
         </div>
@@ -58,7 +58,8 @@ export default function DashboardLayout({ children }) {
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader} style={{ flexDirection: 'column', alignItems: 'stretch' }}>
           <div className={styles.sidebarLogoWrapper}>
-            <img src="/logo.png" alt="Systems Edge Solutions" className={styles.sidebarLogoImg} />
+            <img src="/light-mode-logo.png" alt="Systems Edge Solutions" className={styles.sidebarLogoImg} />
+            <img src="/icon-logo.png" alt="Systems Edge Solutions" className={styles.sidebarIconImg} />
           </div>
           <div className={styles.sidebarTrackerBadge}>Scrum Tracker</div>
         </div>
