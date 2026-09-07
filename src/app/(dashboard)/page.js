@@ -82,7 +82,11 @@ export default function DashboardPage() {
             Welcome, <strong>{user.name}</strong> ({roleLabel(user.role)}) — Sprint operations are active
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 10 }}>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+          <div aria-label={`Current role: ${roleLabel(user.role)}`} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 12px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: 10 }}>
+            <span className="text-xs text-muted" style={{ fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Current access</span>
+            <span className={`badge ${roleBadge(user.role)}`}>{roleLabel(user.role)}</span>
+          </div>
           {canManage && (
             <button className="btn btn-secondary" onClick={() => router.push('/board')}>
               📊 Sprint Board
