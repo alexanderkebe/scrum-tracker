@@ -69,37 +69,6 @@ export default function DashboardPage() {
 
   return (
     <div className={styles.page}>
-      {/* Top Header */}
-      <div className={styles.pageHeader} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--teal)' }}>
-              Systems Edge Solutions • Agile Command Center
-            </span>
-          </div>
-          <h1 className={styles.pageTitle}>Dashboard</h1>
-          <p className={styles.pageSubtitle}>
-            Welcome, <strong>{user.name}</strong> ({roleLabel(user.role)}) — Sprint operations are active
-          </p>
-        </div>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-          <div aria-label={`Current role: ${roleLabel(user.role)}`} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 12px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: 10 }}>
-            <span className="text-xs text-muted" style={{ fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Current access</span>
-            <span className={`badge ${roleBadge(user.role)}`}>{roleLabel(user.role)}</span>
-          </div>
-          {canManage && (
-            <button className="btn btn-secondary" onClick={() => router.push('/board')}>
-              📊 Sprint Board
-            </button>
-          )}
-          {canManage && (
-            <button className="btn btn-primary" onClick={() => router.push('/meetings/new?type=standup')}>
-              ⚡ Start Stand-up
-            </button>
-          )}
-        </div>
-      </div>
-
       {/* Ceremony Alert Banner */}
       <div className={styles.ceremonyAlert}>
         <div className={styles.ceremonyAlertInfo}>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
 import styles from '../../login/auth.module.css';
@@ -9,31 +9,42 @@ export default function GoogleAuthCallbackPage() {
   const router = useRouter();
   const { refreshUser } = useAuth();
   const [error, setError] = useState('');
+  const completion = useRef(null);
 
   useEffect(() => {
     const completeSignIn = async () => {
-      const accessToken = new URLSearchParams(window.location.hash.slice(1)).get('access_token');
-      if (!accessToken) {
-        setError('Google did not return a valid sign-in session. Please try again.');
-        return;
+      const params = new URLSearchParams(window.location.search);
+      const fragment = new URLSearchParams(window.location.hash.slice(1));
+      const providerError = params.get('error') || fragment.get('error');
+      const code = params.get('code');
+      window.history.replaceState(null, '', '/auth/callback');
+      if (providerError) {
+        throw new Error(providerError === 'access_denied'
+          ? 'Google sign-in was cancelled or access was denied. Please try again.'
+          : 'Google could not complete sign-in. Please try again.');
+      }
+      if (!code) {
+        throw new Error('Your Google sign-in link is missing or expired. Please start again.');
       }
 
       try {
         const response = await fetch('/api/auth/google', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ accessToken })
+          body: JSON.stringify({ code })
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Could not complete Google sign-in.');
         await refreshUser();
         router.replace('/');
       } catch (err) {
-        setError(err.message || 'Could not complete Google sign-in.');
+        throw new Error(err.message || 'Could not complete Google sign-in.');
       }
     };
 
-    completeSignIn();
+    // React may replay effects in development; exchange each OAuth code only once.
+    if (!completion.current) completion.current = completeSignIn();
+    completion.current.catch((err) => setError(err.message));
   }, [refreshUser, router]);
 
   return (

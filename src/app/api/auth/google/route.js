@@ -2,18 +2,26 @@ import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { getSupabase, throwIfDbError } from '@/lib/supabase';
 import { createSession, hashPassword } from '@/lib/auth';
+import { createGoogleAuthClient, isSameOrigin } from '@/lib/google-auth-server';
 
 export async function POST(request) {
+  if (!isSameOrigin(request)) return NextResponse.json({ error: 'Invalid sign-in request.' }, { status: 403 });
   try {
-    const { accessToken } = await request.json();
-    if (!accessToken) return NextResponse.json({ error: 'Missing Google access token' }, { status: 400 });
+    const body = await request.json().catch(() => null);
+    const code = body?.code;
+    if (typeof code !== 'string' || !code.trim()) return NextResponse.json({ error: 'Missing Google sign-in code' }, { status: 400 });
+
+    const auth = await createGoogleAuthClient();
+    const { data: sessionData, error: exchangeError } = await auth.auth.exchangeCodeForSession(code);
+    if (exchangeError || !sessionData.session) {
+      return NextResponse.json({ error: 'Your Google sign-in has expired or was started in another browser. Please start again.' }, { status: 401 });
+    }
 
     const supabase = getSupabase();
-    const { data: authData, error: authError } = await supabase.auth.getUser(accessToken);
-    throwIfDbError(authError);
+    const { data: authData, error: authError } = await auth.auth.getUser(sessionData.session.access_token);
     const authUser = authData.user;
     const providers = authUser?.app_metadata?.providers || [];
-    if (!authUser || !providers.includes('google') || !authUser.email) {
+    if (authError || !authUser || !providers.includes('google') || !authUser.email || !authUser.email_confirmed_at) {
       return NextResponse.json({ error: 'Google account verification failed' }, { status: 401 });
     }
 
@@ -28,6 +36,9 @@ export async function POST(request) {
     }
 
     if (user) {
+      if (user.auth_user_id && user.auth_user_id !== authUser.id) {
+        return NextResponse.json({ error: 'This email is already linked to another account. Please contact your workspace administrator.' }, { status: 409 });
+      }
       const { data: linkedUser, error: linkError } = await supabase.from('users')
         .update({ auth_user_id: authUser.id }).eq('id', user.id)
         .select('id, email, name, role, avatar_color').single();
@@ -48,9 +59,9 @@ export async function POST(request) {
     }
 
     await createSession(user.id);
-    return NextResponse.json({ user });
+    return NextResponse.json({ user }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
     console.error('Google sign-in error:', error);
-    return NextResponse.json({ error: error.message || 'Could not complete Google sign-in' }, { status: 500 });
+    return NextResponse.json({ error: 'Could not complete Google sign-in. Please try again or contact your workspace administrator.' }, { status: 500 });
   }
 }

@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { BarChart3, Eye, EyeOff, Lightbulb, LockKeyhole, Mail, MousePointer2, UserRound, UsersRound } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { startGoogleSignIn } from '@/lib/google-auth';
 import { BRAND_LOGOS } from '@/lib/logos';
@@ -10,36 +12,90 @@ import styles from '../login/auth.module.css';
 
 const GoogleIcon = () => <svg aria-hidden="true" viewBox="0 0 24 24"><path fill="#4285F4" d="M21.35 12.23c0-.71-.06-1.19-.19-1.69H12v3.45h5.38c-.11.86-.71 2.16-2.04 3.03l-.02.12 2.97 2.3.21.02c1.93-1.78 2.85-4.4 2.85-7.23Z"/><path fill="#34A853" d="M12 21.75c2.63 0 4.84-.86 6.45-2.29l-3.07-2.44c-.82.57-1.92.97-3.38.97-2.58 0-4.77-1.7-5.55-4.06l-.11.01-3.09 2.39-.04.1A9.75 9.75 0 0 0 12 21.75Z"/><path fill="#FBBC05" d="M6.45 13.93A5.87 5.87 0 0 1 6.14 12c0-.67.12-1.33.3-1.93v-.13l-3.12-2.42-.1.05A9.75 9.75 0 0 0 2.25 12c0 1.6.38 3.1.97 4.43l3.23-2.5Z"/><path fill="#EA4335" d="M12 6.01c1.84 0 3.08.8 3.79 1.46l2.77-2.7C16.83 3.16 14.63 2.25 12 2.25a9.75 9.75 0 0 0-8.78 5.32l3.22 2.5C7.23 7.7 9.42 6.01 12 6.01Z"/></svg>;
 
-export default function RegisterPage() {
-  const [name, setName] = useState(''); const [email, setEmail] = useState(''); const [password, setPassword] = useState('');
-  const [error, setError] = useState(''); const [loading, setLoading] = useState(false); const [googleLoading, setGoogleLoading] = useState(false);
-  const { register } = useAuth(); const router = useRouter();
-  const handleSubmit = async (event) => { event.preventDefault(); setError(''); setLoading(true); try { await register(name, email, password); router.push('/'); } catch (err) { setError(err.message); } finally { setLoading(false); } };
-  const handleGoogle = async () => { setError(''); setGoogleLoading(true); try { await startGoogleSignIn(); } catch (err) { setError(err.message); setGoogleLoading(false); } };
+const BrandLockup = () => (
+  <div className={`${styles.loginBrand} ${styles.loginBrandLight}`}>
+    <Image src={BRAND_LOGOS.onDark.icon} alt="" width={54} height={72} priority />
+    <div><strong>Scrum Tracker</strong><span>by Systems Edge Solutions</span></div>
+  </div>
+);
 
-  return <div className={styles.authPage}>
-    <aside className={styles.authHero}><div className={styles.heroContent}>
-      <div className={styles.heroLogoWrapper}><img src={BRAND_LOGOS.onDark.full} alt="Systems Edge Solutions" className={styles.heroLogoImg} /></div>
-      <p className={styles.eyebrow}>YOUR TEAM&apos;S HOME</p><h1 className={styles.heroTitle}>Make progress visible.</h1>
-      <p className={styles.heroSubtitle}>Bring planning, stand-ups, and sprint delivery into one shared rhythm.</p>
-      <div className={styles.heroFeatures}><div className={styles.heroFeature}><span>01</span> Align on priorities</div><div className={styles.heroFeature}><span>02</span> Build momentum together</div><div className={styles.heroFeature}><span>03</span> Learn after every sprint</div></div>
-    </div></aside>
-    <main className={styles.authForm}><div className={styles.formContainer}>
-      <div className={styles.formBrand}>
-        <div className={styles.formIconBadge}><img src={BRAND_LOGOS.onLight.icon} alt="Systems Edge Solutions icon" className={styles.formIconImg} /></div>
-        <img src={BRAND_LOGOS.onLight.full} alt="Systems Edge Solutions" className={styles.formWordmark} />
+const benefits = [
+  { icon: UsersRound, title: 'Collaborate in one workspace', text: 'Keep your team aligned on tasks and goals.' },
+  { icon: BarChart3, title: 'Track work clearly', text: 'See progress across every sprint in real time.' },
+  { icon: Lightbulb, title: 'Learn and improve', text: 'Capture insights after each iteration.' },
+];
+
+export default function RegisterPage() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const { register } = useAuth();
+  const router = useRouter();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault(); setError(''); setLoading(true);
+    try { await register(name, email, password); router.push('/'); } catch (err) { setError(err.message); } finally { setLoading(false); }
+  };
+  const handleGoogle = async () => {
+    setError(''); setGoogleLoading(true);
+    try { await startGoogleSignIn(); } catch (err) { setError(err.message); setGoogleLoading(false); }
+  };
+
+  return <div className={`${styles.authPage} ${styles.loginPage} ${styles.registerPage}`}>
+    <aside className={`${styles.authHero} ${styles.loginHero} ${styles.registerHero}`}>
+      <div className={styles.loginGlow} />
+      <div className={styles.loginDots} aria-hidden="true" />
+      <div className={`${styles.heroContent} ${styles.loginHeroContent}`}>
+        <BrandLockup />
+        <h1 className={`${styles.loginHeroTitle} ${styles.registerHeroTitle}`}>Make sprint<br />planning <span>visible.</span></h1>
+        <p className={styles.loginHeroSubtitle}>Bring planning, stand-ups, tasks, and team<br className={styles.desktopBreak} /> progress into one shared workspace.</p>
+        <div className={`${styles.loginFeatureList} ${styles.registerFeatureList}`}>
+          {benefits.map(({ icon: Icon, title, text }, index) => <div className={`${styles.loginFeature} ${styles.registerFeature}`} key={title}>
+            <span><Icon /></span>
+            <div><strong><b>0{index + 1}</b>{title}</strong><small>{text}</small></div>
+          </div>)}
+        </div>
+        <div className={`${styles.boardSketch} ${styles.registerBoard}`} aria-hidden="true">
+          <div className={styles.registerBoardHeader}><strong>Sprint 24</strong><span>In Progress</span><i>●</i><i>●</i><i>+</i></div>
+          <div className={styles.boardColumns}>
+            <div><b>TO DO</b><span /><span /><span /></div>
+            <div><b>IN PROGRESS</b><span /><span className={styles.highlightTask} /><span /></div>
+            <div><b>DONE</b><span /><span /><span /></div>
+          </div>
+          <MousePointer2 className={styles.boardCursor} />
+        </div>
+        <div className={styles.ideaNote} aria-hidden="true">Ideas<br />→ Progress<br />→ Results</div>
+        <div className={styles.sprintNote} aria-hidden="true">Better sprints.<br />Stronger teams.<i /></div>
       </div>
-      <p className={styles.formEyebrow}>GET STARTED</p><h2 className={styles.formTitle}>Create your account</h2><p className={styles.formSubtitle}>Start collaborating with your team in minutes.</p>
-      {error && <div className={styles.errorBox} role="alert">{error}</div>}
-      <button type="button" className={styles.googleButton} onClick={handleGoogle} disabled={googleLoading || loading}><GoogleIcon />{googleLoading ? 'Redirecting to Google…' : 'Continue with Google'}</button>
-      <div className={styles.divider}><span>or sign up with email</span></div>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group"><label className="form-label" htmlFor="register-name">Full name</label><input id="register-name" type="text" autoComplete="name" className="form-input" value={name} onChange={(event) => setName(event.target.value)} placeholder="Your name" required /></div>
-        <div className="form-group"><label className="form-label" htmlFor="register-email">Work email</label><input id="register-email" type="email" autoComplete="email" className="form-input" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" required /></div>
-        <div className="form-group"><label className="form-label" htmlFor="register-password">Password</label><input id="register-password" type="password" autoComplete="new-password" className="form-input" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" required minLength={6} /></div>
-        <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={loading || googleLoading}>{loading ? 'Creating account…' : 'Create account'}</button>
-      </form>
-      <p className={styles.formFooter}>Already have an account? <Link href="/login" className={styles.formLink}>Sign in</Link></p>
-    </div></main>
+    </aside>
+    <main className={`${styles.authForm} ${styles.loginFormPanel} ${styles.registerFormPanel}`}>
+      <div className={`${styles.formContainer} ${styles.loginCard} ${styles.registerCard}`}>
+        <h2 className={styles.loginFormTitle}>Create your<br />Scrum Tracker account</h2>
+        <p className={styles.loginFormSubtitle}>Start collaborating with your team in minutes.</p>
+        {error && <div className={styles.errorBox} role="alert">{error}</div>}
+        <button type="button" className={styles.googleButton} onClick={handleGoogle} disabled={googleLoading || loading}><GoogleIcon />{googleLoading ? 'Redirecting to Google…' : 'Continue with Google'}</button>
+        <div className={styles.divider}><span>or sign up with email</span></div>
+        <form className={styles.loginFormFields} onSubmit={handleSubmit}>
+          <div className={styles.loginField}>
+            <label htmlFor="register-name">Full name</label>
+            <div className={styles.inputShell}><UserRound aria-hidden="true" /><input id="register-name" type="text" autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} placeholder="Your name" required /></div>
+          </div>
+          <div className={styles.loginField}>
+            <label htmlFor="register-email">Work email</label>
+            <div className={styles.inputShell}><Mail aria-hidden="true" /><input id="register-email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" required /></div>
+          </div>
+          <div className={styles.loginField}>
+            <label htmlFor="register-password">Password</label>
+            <div className={styles.inputShell}><LockKeyhole aria-hidden="true" /><input id="register-password" type={showPassword ? 'text' : 'password'} autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" required minLength={6} /><button type="button" onClick={() => setShowPassword(value => !value)} aria-label={showPassword ? 'Hide password' : 'Show password'}>{showPassword ? <EyeOff /> : <Eye />}</button></div>
+          </div>
+          <button type="submit" className={styles.loginSubmit} disabled={loading || googleLoading}>{loading ? 'Creating account…' : 'Create account'}</button>
+        </form>
+        <p className={`${styles.formFooter} ${styles.loginFooter}`}>Already have an account? <Link href="/login" className={styles.formLink}>Sign in</Link></p>
+      </div>
+    </main>
   </div>;
 }
