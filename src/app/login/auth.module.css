@@ -109,46 +109,46 @@
   background: radial-gradient(ellipse at 100% 100%, #d1e5f74d, transparent 55%), #f8fbfe;
 }
 .formContainer {
-  width: 100%; max-width: 565px; min-height: 610px;
-  max-height: calc(100vh - 64px); max-height: calc(100svh - 64px);
+  width: 100%; max-width: 520px; min-height: 0;
+  max-height: calc(100vh - 40px); max-height: calc(100svh - 40px);
   overflow-y: auto; overscroll-behavior: contain;
-  padding: 34px 36px; border: 1px solid #dbe5ed; border-radius: 18px;
+  padding: 26px 32px; border: 1px solid #dbe5ed; border-radius: 16px;
   background: #ffffffed; box-shadow: 0 18px 60px #233d5b0d;
   display: flex; flex-direction: column;
 }
-.loginCard > .loginBrand { margin-bottom: 30px; }
-.loginFormTitle { margin: 0 0 10px; color: #0b1739; font-size: 28px; line-height: 1.2; letter-spacing: -.035em; font-weight: 800; }
-.loginFormSubtitle { color: #7a89a5; font-size: 15px; line-height: 1.6; margin-bottom: 28px; }
+.loginCard > .loginBrand { margin-bottom: 20px; }
+.loginFormTitle { margin: 0 0 6px; color: #0b1739; font-size: 24px; line-height: 1.2; letter-spacing: -.035em; font-weight: 800; }
+.loginFormSubtitle { color: #7a89a5; font-size: 14px; line-height: 1.5; margin-bottom: 18px; }
 .googleButton {
-  flex-shrink: 0; width: 100%; min-height: 48px; display: flex; align-items: center; justify-content: center;
-  gap: 10px; padding: 8px 12px; border: 1px solid #d3dee8; border-radius: 9px;
-  background: #fff; color: #0c1737; font: inherit; font-size: 15px; font-weight: 650;
+  flex-shrink: 0; width: 100%; min-height: 42px; display: flex; align-items: center; justify-content: center;
+  gap: 10px; padding: 6px 12px; border: 1px solid #d3dee8; border-radius: 9px;
+  background: #fff; color: #0c1737; font: inherit; font-size: 14px; font-weight: 650;
   transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
 .googleButton:hover:not(:disabled) { border-color: #008f85; box-shadow: 0 4px 16px #0080800d; transform: translateY(-1px); }
 .googleButton:disabled { cursor: wait; opacity: .7; }
 .googleButton svg { width: 20px; height: 20px; flex-shrink: 0; }
-.divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: #7c8ba5; font-size: 12px; text-align: center; }
+.divider { display: flex; align-items: center; gap: 12px; margin: 14px 0; color: #7c8ba5; font-size: 12px; text-align: center; }
 .divider::before, .divider::after { content: ''; height: 1px; flex: 1; background: #d9e1e9; }
-.loginFormFields { display: grid; gap: 18px; }
-.loginField { display: grid; gap: 7px; }
-.loginField label { color: #34415e; font-size: 12px; font-weight: 650; letter-spacing: .055em; text-transform: uppercase; }
-.inputShell { height: 48px; display: flex; align-items: center; gap: 11px; padding: 0 13px; border: 1px solid #d6e0e9; border-radius: 9px; background: #f8fafc; transition: border-color .2s ease, box-shadow .2s ease; }
+.loginFormFields { display: grid; gap: 12px; }
+.loginField { display: grid; gap: 5px; }
+.loginField label { color: #34415e; font-size: 11px; font-weight: 650; letter-spacing: .055em; text-transform: uppercase; }
+.inputShell { height: 42px; display: flex; align-items: center; gap: 11px; padding: 0 12px; border: 1px solid #d6e0e9; border-radius: 9px; background: #f8fafc; transition: border-color .2s ease, box-shadow .2s ease; }
 .inputShell:focus-within { border-color: #0a948b; box-shadow: 0 0 0 3px #0a948b14; background: #fff; }
 .inputShell > svg { width: 18px; height: 18px; color: #8b99b3; flex-shrink: 0; }
-.inputShell input { min-width: 0; width: 100%; height: 100%; font-size: 16px; color: #111b3c; }
+.inputShell input { min-width: 0; width: 100%; height: 100%; font-size: 14px; color: #111b3c; }
 .inputShell input::placeholder { color: #8c9bb4; }
 .inputShell button { width: 34px; height: 34px; display: grid; place-items: center; color: #8b99b3; border-radius: 7px; flex-shrink: 0; }
 .inputShell button:hover { background: #edf2f6; color: #41506c; }
 .inputShell button svg { width: 18px; height: 18px; }
-.loginSubmit { min-height: 48px; padding: 10px; margin-top: 2px; border-radius: 9px; color: #fff; font-size: 15px; font-weight: 700; background: linear-gradient(90deg, #069187, #008f85); box-shadow: 0 5px 14px #008f851f; transition: transform .2s ease, box-shadow .2s ease; }
+.loginSubmit { min-height: 42px; padding: 8px; margin-top: 2px; border-radius: 9px; color: #fff; font-size: 14px; font-weight: 700; background: linear-gradient(90deg, #069187, #008f85); box-shadow: 0 5px 14px #008f851f; transition: transform .2s ease, box-shadow .2s ease; }
 .loginSubmit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 20px #008f852b; }
 .loginSubmit:disabled { opacity: .65; cursor: wait; }
-.loginFooter { padding-top: 24px; margin-top: auto; text-align: center; font-size: 13px; line-height: 1.6; color: #7a89a5; }
+.loginFooter { padding-top: 16px; margin-top: auto; text-align: center; font-size: 13px; line-height: 1.6; color: #7a89a5; }
 .formLink { color: #00877e; font-weight: 650; }
 .formLink:hover { text-decoration: underline; }
-.registerCard { min-height: 636px; }
-.registerCard .loginFormTitle { margin-top: 2px; }
+.registerCard { min-height: 0; }
+.registerCard .loginFormTitle { margin-top: 0; }
 .errorBox { flex-shrink: 0; padding: 10px 12px; margin-bottom: 18px; border: 1px solid #dc262633; border-radius: 8px; background: var(--danger-light); color: var(--danger); font-size: 13px; }
 .callbackPage { min-height: 100svh; display: grid; place-items: center; padding: 24px; background: var(--bg-hero); }
 .callbackCard { width: min(420px, 100%); padding: 40px; border-radius: 20px; background: #fff; text-align: center; box-shadow: 0 24px 70px #0a0f2d52; }
@@ -202,13 +202,16 @@
   .loginFormSubtitle { font-size: 14px; }
 }
 @media (max-height: 740px) {
-  .formContainer { min-height: 0; max-height: calc(100vh - 32px); max-height: calc(100svh - 32px); padding-block: 24px; }
-  .authForm { padding-block: 16px; }
-  .loginCard > .loginBrand { margin-bottom: 22px; }
-  .loginFormSubtitle { margin-bottom: 20px; }
-  .divider { margin: 18px 0; }
-  .loginFormFields { gap: 14px; }
-  .loginFooter { padding-top: 20px; }
+  .formContainer { min-height: 0; max-height: calc(100vh - 24px); max-height: calc(100svh - 24px); padding-block: 20px; }
+  .authForm { padding-block: 12px; }
+  .loginCard > .loginBrand { margin-bottom: 16px; }
+  .loginFormSubtitle { margin-bottom: 14px; }
+  .divider { margin: 10px 0; }
+  .loginFormFields { gap: 10px; }
+  .loginFooter { padding-top: 14px; }
+  .inputShell { height: 38px; }
+  .googleButton { min-height: 38px; }
+  .loginSubmit { min-height: 38px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .authHero *, .authHero::before, .authHero::after, .formContainer * { animation: none !important; transition: none !important; }
