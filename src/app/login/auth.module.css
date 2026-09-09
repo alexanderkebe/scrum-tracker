@@ -149,6 +149,24 @@
 .formLink:hover { text-decoration: underline; }
 .registerCard { min-height: 0; }
 .registerCard .loginFormTitle { margin-top: 0; }
+
+/* New elements — hidden on desktop, visible on mobile */
+.mobileTitle, .mobileSubtitle { display: none; }
+.mobileFooterDecor { display: none; }
+.dividerMobileText { display: none; }
+.submitArrow { display: none; }
+
+/* Remember me / Forgot password row */
+.rememberRow { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 2px; }
+.rememberLabel { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #4a5978; cursor: pointer; }
+.rememberLabel input[type="checkbox"] { width: 16px; height: 16px; accent-color: #008f85; cursor: pointer; }
+.forgotLink { font-size: 13px; color: #0891b2; font-weight: 600; white-space: nowrap; }
+.forgotLink:hover { text-decoration: underline; }
+
+/* Flex order wrappers (no-op on desktop) */
+.oauthBlock { order: 0; }
+.dividerBlock { order: 0; }
+.formBlock { order: 0; }
 .errorBox { flex-shrink: 0; padding: 10px 12px; margin-bottom: 18px; border: 1px solid #dc262633; border-radius: 8px; background: var(--danger-light); color: var(--danger); font-size: 13px; }
 .callbackPage { min-height: 100svh; display: grid; place-items: center; padding: 24px; background: var(--bg-hero); }
 .callbackCard { width: min(420px, 100%); padding: 40px; border-radius: 20px; background: #fff; text-align: center; box-shadow: 0 24px 70px #0a0f2d52; }
@@ -185,21 +203,248 @@
   .authForm { padding: 32px 24px 40px; }
 }
 @media (max-width: 600px) {
-  .authHero { padding: 36px 26px 40px; }
-  .heroContent { grid-template-columns: minmax(0, 1fr); grid-template-areas: "brand" "title" "subtitle" "board" "note"; }
-  .loginBrandLight { margin-bottom: 34px; }
-  .loginBrandLight strong { font-size: 25px; }
-  .loginBrandLight div > span { font-size: 11px; }
-  .loginBrandLight .brandIcon { width: 40px; height: 40px; }
-  .loginHeroTitle { font-size: clamp(29px, 7.6vw, 38px); margin-bottom: 16px; }
-  .loginHeroSubtitle { font-size: 14px; margin-bottom: 28px; max-width: 340px; }
-  .loginFeatureList, .ideaNote { display: none; }
-  .boardSketch { width: min(270px, 88%); height: 210px; justify-self: end; }
-  .sprintNote { font-size: 13px; margin-top: 24px; }
-  .authForm { padding: 24px 14px; }
-  .formContainer { padding: 28px 22px; border-radius: 16px; }
-  .loginFormTitle { font-size: 26px; }
-  .loginFormSubtitle { font-size: 14px; }
+  /* ── Hide the hero aside entirely ── */
+  .authHero { display: none; }
+
+  /* ── Full-bleed dark background on the form panel ── */
+  .authPage { background: #131640; }
+  .authForm {
+    padding: 0;
+    background:
+      radial-gradient(ellipse at 30% 80%, #26317944, transparent 55%),
+      radial-gradient(ellipse at 85% 15%, #3b60d215, transparent 45%),
+      linear-gradient(160deg, #1a1850, #131640 55%, #181e5a);
+  }
+
+  /* ── Card → transparent, full-width, scrollable ── */
+  .formContainer {
+    border: none; border-radius: 0;
+    background: transparent; box-shadow: none;
+    padding: clamp(36px, 8vw, 56px) clamp(22px, 6vw, 40px) 32px;
+    max-height: none; overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ── Brand tweaks for dark bg ── */
+  .loginBrand { color: #fff; }
+  .loginBrand strong { font-style: normal; font-size: 26px; }
+  .loginBrand div > span { color: #a0a8c8; font-size: 11px; }
+
+  /* ── Show mobile title, hide desktop title ── */
+  .mobileTitle {
+    display: block;
+    margin: 24px 0 6px;
+    color: #fff;
+    font-size: clamp(28px, 7.5vw, 38px);
+    font-weight: 850;
+    letter-spacing: -.04em;
+    line-height: 1.1;
+  }
+  .mobileSubtitle {
+    display: block;
+    color: #a0a8c8;
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+  .loginFormTitle, .loginFormSubtitle { display: none; }
+
+  /* ── Reorder: form (1) → submit included → divider (2) → google (3) ── */
+  .formBlock { order: 1; }
+  .dividerBlock { order: 2; }
+  .oauthBlock { order: 3; }
+  .loginFooter { order: 4; }
+  .mobileFooterDecor { order: 5; }
+  .errorBox { order: 0; }
+
+  /* ── Divider text: show mobile, hide desktop ── */
+  .dividerDesktopText { display: none; }
+  .dividerMobileText { display: inline; }
+  .divider { color: #6b7496; margin: 16px 0; }
+  .divider::before, .divider::after { background: #2e3567; }
+
+  /* ── Hide field labels on mobile (inputs have placeholders) ── */
+  .loginField label { display: none; }
+
+  /* ── Dark glassmorphism inputs ── */
+  .inputShell {
+    height: 48px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    backdrop-filter: blur(6px);
+  }
+  .inputShell:focus-within {
+    border-color: rgba(39, 222, 212, 0.45);
+    box-shadow: 0 0 0 3px rgba(39, 222, 212, 0.08);
+    background: rgba(255, 255, 255, 0.09);
+  }
+  .inputShell > svg { color: rgba(255, 255, 255, 0.4); }
+  .inputShell input { color: #fff; font-size: 15px; }
+  .inputShell input::placeholder { color: rgba(255, 255, 255, 0.35); }
+  .inputShell button { color: rgba(255, 255, 255, 0.4); }
+  .inputShell button:hover { background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.7); }
+  .loginFormFields { gap: 14px; }
+
+  /* ── Remember me / Forgot password — dark variant ── */
+  .rememberRow { margin-top: 4px; }
+  .rememberLabel { color: #c0c6dd; font-size: 13px; }
+  .rememberLabel input[type="checkbox"] { accent-color: #27ded8; }
+  .forgotLink { color: #27ded8; }
+
+  /* ── Submit button — wider gradient, show arrow ── */
+  .loginSubmit {
+    min-height: 48px;
+    margin-top: 6px;
+    border-radius: 12px;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: linear-gradient(90deg, #06b5a8, #008f85 55%, #069187);
+    box-shadow: 0 8px 24px rgba(0, 143, 133, 0.28);
+  }
+  .submitArrow { display: inline-block; width: 18px; height: 18px; }
+
+  /* ── Google button — dark translucent ── */
+  .googleButton {
+    min-height: 48px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e0e4f0;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+  .googleButton:hover:not(:disabled) {
+    border-color: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* ── Footer link ── */
+  .loginFooter { color: #8890b4; padding-top: 18px; }
+  .formLink { color: #27ded8; }
+
+  /* ── Error box dark variant ── */
+  .errorBox { background: rgba(220, 38, 38, 0.12); border-color: rgba(220, 38, 38, 0.3); color: #fca5a5; }
+
+  /* ── Mobile footer decoration (board + tagline) ── */
+  .mobileFooterDecor {
+    display: block;
+    margin-top: 32px;
+    padding-top: 12px;
+  }
+  .mobileFooterRow {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 4vw, 28px);
+    justify-content: center;
+    padding: 0 8px;
+  }
+
+  /* Board — dramatic tilt + glow */
+  .mobileFooterRow .boardSketch {
+    width: clamp(160px, 42vw, 220px);
+    height: clamp(110px, 30vw, 155px);
+    flex-shrink: 0;
+    grid-area: unset;
+    align-self: auto;
+    transform: perspective(700px) rotateY(-8deg) rotateX(3deg) rotateZ(1.5deg);
+    animation: none;
+    border: 1px solid rgba(101, 126, 255, 0.35);
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(30, 36, 85, 0.85), rgba(16, 20, 58, 0.9));
+    box-shadow:
+      0 25px 50px rgba(4, 6, 36, 0.5),
+      0 0 40px rgba(75, 97, 238, 0.12),
+      0 0 80px rgba(39, 214, 207, 0.06),
+      inset 0 1px rgba(255, 255, 255, 0.06);
+  }
+  .mobileFooterRow .boardTop {
+    height: 22px;
+    padding: 0 8px;
+    border-bottom: 1px solid rgba(112, 126, 210, 0.15);
+  }
+  .mobileFooterRow .boardTop i {
+    width: 5px; height: 5px;
+    background: #6f78ca; opacity: .5;
+  }
+  .mobileFooterRow .boardColumns {
+    gap: 3px;
+    padding: 6px 5px;
+    height: calc(100% - 22px);
+  }
+  .mobileFooterRow .boardColumns > div {
+    padding: 4px 3px;
+  }
+  .mobileFooterRow .boardColumns b {
+    font-size: 5.5px;
+    padding-bottom: 3px;
+    margin-bottom: 5px;
+  }
+  .mobileFooterRow .boardColumns span {
+    height: 22px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, rgba(60, 70, 150, 0.45), rgba(40, 50, 110, 0.3));
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
+  }
+  /* Colorful indicator dots — pink, green, blue */
+  .mobileFooterRow .boardColumns span::before {
+    width: 4px; height: 4px;
+    margin: 6px 0 0 5px;
+    background: #e74edd;
+    box-shadow: 9px 0 0 -0.5px #34d399, 16px 0 0 -0.5px #60a5fa;
+  }
+  .mobileFooterRow .boardColumns .highlightTask {
+    border: 1px solid rgba(39, 214, 207, 0.4);
+    background: linear-gradient(135deg, rgba(39, 214, 207, 0.15), rgba(30, 40, 100, 0.35));
+  }
+  .mobileFooterRow .boardColumns .highlightTask::before {
+    background: #34d399;
+    box-shadow: 9px 0 0 -0.5px #60a5fa, 16px 0 0 -0.5px #e74edd;
+  }
+
+  /* Cursive note — with teal underline accent */
+  .mobileFooterNote {
+    font-family: 'Segoe Print', 'Bradley Hand', cursive;
+    font-style: italic;
+    font-size: clamp(17px, 5vw, 24px);
+    line-height: 1.55;
+    color: #27ded8;
+    white-space: nowrap;
+    position: relative;
+    text-shadow: 0 0 18px rgba(39, 222, 212, 0.2);
+  }
+  .mobileFooterNote::after {
+    content: '';
+    display: block;
+    width: 45px;
+    height: 2px;
+    margin: 8px 0 0 4px;
+    background: linear-gradient(90deg, #27ded8, transparent);
+    border-radius: 2px;
+    transform: rotate(-3deg);
+  }
+
+  /* Tagline — with centered teal accent line */
+  .mobileTagline {
+    margin-top: 28px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #4a5180;
+  }
+  .mobileTagline::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 2px;
+    margin: 0 auto 12px;
+    background: linear-gradient(90deg, #27ded8, #1a9e98);
+    border-radius: 2px;
+  }
 }
 @media (max-height: 740px) {
   .formContainer { min-height: 0; max-height: calc(100vh - 24px); max-height: calc(100svh - 24px); padding-block: 20px; }

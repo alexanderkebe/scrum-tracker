@@ -5,7 +5,7 @@ import AuthBrand from '@/components/AuthBrand';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BarChart3, Eye, EyeOff, Lightbulb, LockKeyhole, Mail, MousePointer2, UserRound, UsersRound } from 'lucide-react';
+import { ArrowRight, BarChart3, Eye, EyeOff, Lightbulb, LockKeyhole, Mail, MousePointer2, UserRound, UsersRound } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { startGoogleSignIn } from '@/lib/google-auth';
 import styles from '../login/auth.module.css';
@@ -68,12 +68,23 @@ export default function RegisterPage() {
     <main className={styles.authForm}>
       <div className={`${styles.formContainer} ${styles.loginCard} ${styles.registerCard}`}>
         <AuthBrand />
+
+        {/* Mobile-only hero title */}
+        <h2 className={styles.mobileTitle}>Join the team!</h2>
+        <p className={styles.mobileSubtitle}>Start building better sprints together.</p>
+
+        {/* Desktop title */}
         <h2 className={styles.loginFormTitle}>Create your account</h2>
         <p className={styles.loginFormSubtitle}>Bring your team together.</p>
+
         {error && <div className={styles.errorBox} role="alert">{error}</div>}
-        <button type="button" className={styles.googleButton} onClick={handleGoogle} disabled={googleLoading || loading}>{googleLoading ? <AppLoader inline label="Opening Google…" /> : <><GoogleIcon />Continue with Google</>}</button>
-        <div className={styles.divider}><span>or sign up with email</span></div>
-        <form className={styles.loginFormFields} onSubmit={handleSubmit}>
+
+        <div className={styles.oauthBlock}>
+          <button type="button" className={styles.googleButton} onClick={handleGoogle} disabled={googleLoading || loading}>{googleLoading ? <AppLoader inline label="Opening Google…" /> : <><GoogleIcon />Continue with Google</>}</button>
+        </div>
+        <div className={`${styles.divider} ${styles.dividerBlock}`}><span className={styles.dividerDesktopText}>or sign up with email</span><span className={styles.dividerMobileText}>or continue with</span></div>
+
+        <form className={`${styles.loginFormFields} ${styles.formBlock}`} onSubmit={handleSubmit}>
           <div className={styles.loginField}>
             <label htmlFor="register-name">Full name</label>
             <div className={styles.inputShell}><UserRound aria-hidden="true" /><input id="register-name" type="text" autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} placeholder="Your name" required /></div>
@@ -86,9 +97,26 @@ export default function RegisterPage() {
             <label htmlFor="register-password">Password</label>
             <div className={styles.inputShell}><LockKeyhole aria-hidden="true" /><input id="register-password" type={showPassword ? 'text' : 'password'} autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" required minLength={6} /><button type="button" onClick={() => setShowPassword(value => !value)} aria-label={showPassword ? 'Hide password' : 'Show password'}>{showPassword ? <EyeOff /> : <Eye />}</button></div>
           </div>
-          <button type="submit" className={styles.loginSubmit} disabled={loading || googleLoading}>{loading ? <AppLoader inline label="Creating account…" /> : 'Create account'}</button>
+          <button type="submit" className={styles.loginSubmit} disabled={loading || googleLoading}>{loading ? <AppLoader inline label="Creating account…" /> : <><span>Create account</span><ArrowRight className={styles.submitArrow} /></>}</button>
         </form>
+
         <p className={styles.loginFooter}>Already have an account? <Link href="/login" className={styles.formLink}>Sign in</Link></p>
+
+        {/* Mobile-only board illustration + tagline */}
+        <div className={styles.mobileFooterDecor} aria-hidden="true">
+          <div className={styles.mobileFooterRow}>
+            <div className={styles.boardSketch}>
+              <div className={styles.boardTop}><i /><i /><i /></div>
+              <div className={styles.boardColumns}>
+                <div><b>TO DO</b><span /><span /><span /></div>
+                <div><b>IN PROGRESS</b><span /><span className={styles.highlightTask} /></div>
+                <div><b>DONE</b><span /><span /><span /></div>
+              </div>
+            </div>
+            <div className={styles.mobileFooterNote}>Plan<br />Collaborate<br />Deliver</div>
+          </div>
+          <p className={styles.mobileTagline}>Better sprints. Stronger teams.</p>
+        </div>
       </div>
     </main>
   </div>;

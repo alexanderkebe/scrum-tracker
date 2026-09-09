@@ -5,7 +5,7 @@ import AuthBrand from '@/components/AuthBrand';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BarChart3, Eye, EyeOff, LockKeyhole, Mail, MousePointer2, TriangleAlert, UsersRound } from 'lucide-react';
+import { ArrowRight, BarChart3, Eye, EyeOff, LockKeyhole, Mail, MousePointer2, TriangleAlert, UsersRound } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { startGoogleSignIn } from '@/lib/google-auth';
 import styles from './auth.module.css';
@@ -67,23 +67,56 @@ export default function LoginPage() {
     <main className={styles.authForm}>
       <div className={`${styles.formContainer} ${styles.loginCard}`}>
         <AuthBrand />
+
+        {/* Mobile-only hero title */}
+        <h2 className={styles.mobileTitle}>Welcome back!</h2>
+        <p className={styles.mobileSubtitle}>Turn plans into progress, together.</p>
+
+        {/* Desktop title */}
         <h2 className={styles.loginFormTitle}>Sign in to Scrum Tracker</h2>
         <p className={styles.loginFormSubtitle}>Continue with your workspace account.</p>
+
         {error && <div className={styles.errorBox} role="alert">{error}</div>}
-        <button type="button" className={styles.googleButton} onClick={handleGoogle} disabled={googleLoading || loading}>{googleLoading ? <AppLoader inline label="Opening Google…" /> : <><GoogleIcon />Continue with Google</>}</button>
-        <div className={styles.divider}><span>or continue with email</span></div>
-        <form className={styles.loginFormFields} onSubmit={handleSubmit}>
+
+        {/* Google + divider wrapped so mobile can reorder them below the form */}
+        <div className={styles.oauthBlock}>
+          <button type="button" className={styles.googleButton} onClick={handleGoogle} disabled={googleLoading || loading}>{googleLoading ? <AppLoader inline label="Opening Google…" /> : <><GoogleIcon />Continue with Google</>}</button>
+        </div>
+        <div className={`${styles.divider} ${styles.dividerBlock}`}><span className={styles.dividerDesktopText}>or continue with email</span><span className={styles.dividerMobileText}>or continue with</span></div>
+
+        <form className={`${styles.loginFormFields} ${styles.formBlock}`} onSubmit={handleSubmit}>
           <div className={styles.loginField}>
             <label htmlFor="login-email">Work email</label>
             <div className={styles.inputShell}><Mail aria-hidden="true" /><input id="login-email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" required /></div>
           </div>
           <div className={styles.loginField}>
             <label htmlFor="login-password">Password</label>
-            <div className={styles.inputShell}><LockKeyhole aria-hidden="true" /><input id="login-password" type={showPassword ? 'text' : 'password'} autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Enter your password" required /><button type="button" onClick={() => setShowPassword(value => !value)} aria-label={showPassword ? 'Hide password' : 'Show password'}>{showPassword ? <EyeOff /> : <Eye />}</button></div>
+            <div className={styles.inputShell}><LockKeyhole aria-hidden="true" /><input id="login-password" type={showPassword ? 'text' : 'password'} autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Your password" required /><button type="button" onClick={() => setShowPassword(value => !value)} aria-label={showPassword ? 'Hide password' : 'Show password'}>{showPassword ? <EyeOff /> : <Eye />}</button></div>
           </div>
-          <button type="submit" className={styles.loginSubmit} disabled={loading || googleLoading}>{loading ? <AppLoader inline label="Signing in…" /> : 'Sign in'}</button>
+          <div className={styles.rememberRow}>
+            <label className={styles.rememberLabel}><input type="checkbox" defaultChecked /> Remember me</label>
+            <Link href="/login" className={styles.forgotLink}>Forgot password?</Link>
+          </div>
+          <button type="submit" className={styles.loginSubmit} disabled={loading || googleLoading}>{loading ? <AppLoader inline label="Signing in…" /> : <><span>Sign in</span><ArrowRight className={styles.submitArrow} /></>}</button>
         </form>
+
         <p className={styles.loginFooter}>New to Scrum Tracker? <Link href="/register" className={styles.formLink}>Create an account</Link></p>
+
+        {/* Mobile-only board illustration + tagline */}
+        <div className={styles.mobileFooterDecor} aria-hidden="true">
+          <div className={styles.mobileFooterRow}>
+            <div className={styles.boardSketch}>
+              <div className={styles.boardTop}><i /><i /><i /></div>
+              <div className={styles.boardColumns}>
+                <div><b>TO DO</b><span /><span /><span /></div>
+                <div><b>IN PROGRESS</b><span /><span className={styles.highlightTask} /></div>
+                <div><b>DONE</b><span /><span /></div>
+              </div>
+            </div>
+            <div className={styles.mobileFooterNote}>Plan<br />Collaborate<br />Deliver</div>
+          </div>
+          <p className={styles.mobileTagline}>Better sprints. Stronger teams.</p>
+        </div>
       </div>
     </main>
   </div>;
