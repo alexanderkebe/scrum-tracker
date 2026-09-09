@@ -1,4 +1,5 @@
 'use client';
+import AppLoader from '@/components/AppLoader';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import { getAvatarColor, getInitials, roleLabel, roleBadge } from '@/lib/utils';
@@ -40,7 +41,7 @@ export default function TeamPage() {
     loadTeam();
   };
 
-  if (loading) return <div className={styles.page}><p className="text-muted">Loading team roster...</p></div>;
+  if (loading) return <AppLoader label="Loading team…" />;
 
   return (
     <div className={styles.page}>

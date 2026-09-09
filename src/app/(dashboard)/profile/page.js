@@ -1,4 +1,5 @@
 'use client';
+import AppLoader from '@/components/AppLoader';
 import { useState } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import { AVATAR_COLORS, getAvatarColor, getInitials, roleLabel, roleBadge } from '@/lib/utils';
@@ -144,7 +145,7 @@ export default function ProfilePage() {
           </div>
 
           <button type="submit" className="btn btn-primary" disabled={saving}>
-            {saving ? 'Saving...' : 'Save Profile Changes'}
+            {saving ? <AppLoader inline label="Saving…" /> : 'Save Profile Changes'}
           </button>
         </form>
       </div>

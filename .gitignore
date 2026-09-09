@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+/utils/media-tools/
+/utils/loader-contact.jpg
 /.pnp
 .pnp.*
 .yarn/*

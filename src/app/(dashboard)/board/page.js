@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/AuthContext';
+import AppLoader from '@/components/AppLoader';
 import { getAvatarColor, getInitials } from '@/lib/utils';
 import styles from '../dashboard.module.css';
 
@@ -14,6 +15,8 @@ const COLUMNS = [
 export default function BoardPage() {
   const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [team, setTeam] = useState([]);
   const [filterAssignee, setFilterAssignee] = useState(null);
   const [draggedId, setDraggedId] = useState(null);
@@ -28,7 +31,9 @@ export default function BoardPage() {
     ]).then(([t, u]) => {
       setTasks(t.tasks || []);
       setTeam(u.users || []);
-    });
+      setLoadError('');
+    }).catch(() => setLoadError('Could not load the board. Please refresh to try again.'))
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => { loadData(); }, []);
@@ -65,6 +70,9 @@ export default function BoardPage() {
   };
 
   const canManage = user?.role === 'admin' || user?.role === 'scrum_master' || user?.role === 'product_owner';
+
+  if (loading) return <AppLoader label="Loading board…" />;
+  if (loadError) return <div className={styles.page} role="alert">{loadError}</div>;
 
   return (
     <div className={styles.page}>

@@ -1,5 +1,6 @@
 import './globals.css';
 import { AuthProvider } from '@/lib/AuthContext';
+import StartupSplash from '@/components/StartupSplash';
 
 export const metadata = {
   title: 'Scrum Tracker — Systems Edge Solutions',
@@ -15,7 +16,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <AuthProvider>
-          {children}
+          <StartupSplash>{children}</StartupSplash>
           <div id="toast-container" className="toast-container"></div>
         </AuthProvider>
       </body>

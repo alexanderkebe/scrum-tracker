@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
+import AppLoader from '@/components/AppLoader';
 import { formatDate, formatDurationLabel, meetingTypeInfo, sprintProgress, daysRemaining, getAvatarColor, getInitials, roleLabel, roleBadge } from '@/lib/utils';
 import styles from './dashboard.module.css';
 
@@ -47,14 +48,7 @@ export default function DashboardPage() {
   };
 
   if (loading || !data || !user) {
-    return (
-      <div className={styles.page}>
-        <div style={{ padding: '60px 0', textAlign: 'center' }}>
-          <div style={{ width: 44, height: 44, borderRadius: 10, background: 'var(--teal-muted)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, marginBottom: 12 }}>⚡</div>
-          <p className="text-muted">Loading agile command center...</p>
-        </div>
-      </div>
-    );
+    return <AppLoader label="Loading dashboard…" />;
   }
 
   const sprint = data.sprint;

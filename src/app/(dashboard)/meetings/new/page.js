@@ -1,4 +1,5 @@
 'use client';
+import AppLoader from '@/components/AppLoader';
 import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
@@ -223,7 +224,7 @@ function NewMeetingContent() {
           </div>
 
           <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={saving}>
-            {saving ? 'Saving...' : 'Save Meeting'}
+            {saving ? <AppLoader inline label="Saving…" /> : 'Save Meeting'}
           </button>
         </form>
 
@@ -251,7 +252,7 @@ function NewMeetingContent() {
 
 export default function NewMeetingPage() {
   return (
-    <Suspense fallback={<div style={{ padding: 32 }}>Loading...</div>}>
+    <Suspense fallback={<AppLoader />}>
       <NewMeetingContent />
     </Suspense>
   );

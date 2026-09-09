@@ -6,20 +6,36 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   BarChart3,
+  Bell,
   CalendarDays,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Columns3,
   LayoutDashboard,
   LogOut,
+  Search,
   Settings,
   UserCircle,
   UsersRound,
 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
+import AppLoader from '@/components/AppLoader';
 import { getAvatarColor, getInitials, roleLabel } from '@/lib/utils';
 import { BRAND_LOGOS } from '@/lib/logos';
 import styles from './dashboard.module.css';
+
+/** Short role abbreviation shown in parentheses next to the name */
+function roleAbbrev(role) {
+  const map = { admin: 'Admin', product_owner: 'PO', scrum_master: 'SM', member: 'TM' };
+  return map[role] || '';
+}
+
+/** Strip any trailing parenthesized abbreviation from a display name, e.g. "Kal Connor (PO)" → "Kal Connor" */
+function stripRoleFromName(name) {
+  if (!name) return '';
+  return name.replace(/\s*\([A-Za-z]+\)\s*$/, '').trim();
+}
 
 const mainNav = [
   { path: '/', label: 'Dashboard', icon: LayoutDashboard, roles: ['admin', 'product_owner', 'scrum_master', 'member'] },
@@ -55,10 +71,7 @@ export default function DashboardLayout({ children }) {
   }, [user, loading, router]);
 
   if (loading) {
-    return <div className={styles.shellLoading}>
-      <Image src={BRAND_LOGOS.onLight.full} alt="Systems Edge Solutions" width={260} height={70} priority />
-      <p>Loading your workspace…</p>
-    </div>;
+    return <AppLoader fullScreen label="Loading your workspace…" />;
   }
 
   if (!user) return null;
@@ -120,9 +133,31 @@ export default function DashboardLayout({ children }) {
     <main className={`${styles.mainContent} ${collapsed ? styles.mainContentCollapsed : ''}`}>
       <header className={styles.minimalTopbar}>
         <h1>{title}</h1>
-        <Link href="/profile" className={styles.minimalProfile} aria-label="Open my profile" title={user.name}>
-          <span className={styles.shellAvatar} style={{ background: getAvatarColor(user.avatar_color || 0) }}>{getInitials(user.name)}</span>
-        </Link>
+
+        {/* Search bar — hides when viewport is too narrow */}
+        <div className={styles.topbarSearch}>
+          <Search aria-hidden="true" />
+          <input type="text" placeholder="Search tasks, blockers, people…" aria-label="Search" />
+          <kbd className={styles.topbarSearchKbd}>Ctrl + K</kbd>
+        </div>
+
+        <div className={styles.topbarRight}>
+          {/* Notification bell */}
+          <button className={styles.topbarNotifBtn} type="button" aria-label="Notifications" title="Notifications">
+            <Bell />
+            <span className={styles.topbarNotifBadge}>3</span>
+          </button>
+
+          {/* Profile chip */}
+          <Link href="/profile" className={styles.topbarProfileChip} title={user.name}>
+            <span className={styles.shellAvatar} style={{ background: getAvatarColor(user.avatar_color || 0) }}>{getInitials(user.name)}</span>
+            <span className={styles.topbarProfileMeta}>
+              <strong>{stripRoleFromName(user.name)}{roleAbbrev(user.role) ? ` (${roleAbbrev(user.role)})` : ''}</strong>
+              <small>{roleLabel(user.role)}</small>
+            </span>
+            <ChevronDown className={styles.topbarProfileChevron} />
+          </Link>
+        </div>
       </header>
       {children}
     </main>

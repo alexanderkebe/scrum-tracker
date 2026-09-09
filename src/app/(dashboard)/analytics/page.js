@@ -1,4 +1,5 @@
 'use client';
+import AppLoader from '@/components/AppLoader';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import { getAvatarColor, getInitials, formatDurationLabel } from '@/lib/utils';
@@ -48,7 +49,7 @@ export default function AnalyticsPage() {
     URL.revokeObjectURL(url);
   };
 
-  if (loading) return <div className={styles.page}><p className="text-muted">Loading analytics...</p></div>;
+  if (loading) return <AppLoader label="Loading analytics…" />;
   if (!data || !data.sprint) {
     return (
       <div className={styles.page}>

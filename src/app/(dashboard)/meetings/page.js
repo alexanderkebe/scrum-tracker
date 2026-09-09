@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
+import AppLoader from '@/components/AppLoader';
 import { formatDate, formatDurationLabel, meetingTypeInfo } from '@/lib/utils';
 import styles from '../dashboard.module.css';
 
@@ -9,11 +10,18 @@ export default function MeetingsPage() {
   const { user } = useAuth();
   const router = useRouter();
   const [meetings, setMeetings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    fetch('/api/meetings').then(r => r.json()).then(d => setMeetings(d.meetings || []));
+    fetch('/api/meetings').then(r => {
+      if (!r.ok) throw new Error('Could not load meetings. Please refresh to try again.');
+      return r.json();
+    }).then(d => setMeetings(d.meetings || []))
+      .catch(error => setLoadError(error.message))
+      .finally(() => setLoading(false));
   }, []);
 
   const filtered = meetings.filter(m => {
@@ -27,6 +35,9 @@ export default function MeetingsPage() {
   });
 
   const canCreate = user?.role === 'admin' || user?.role === 'scrum_master' || user?.role === 'product_owner';
+
+  if (loading) return <AppLoader label="Loading meetings…" />;
+  if (loadError) return <div className={styles.page} role="alert">{loadError}</div>;
 
   return (
     <div className={styles.page}>

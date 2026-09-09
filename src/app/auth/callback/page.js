@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
+import AppLoader from '@/components/AppLoader';
 import styles from '../../login/auth.module.css';
 
 export default function GoogleAuthCallbackPage() {
@@ -50,7 +51,7 @@ export default function GoogleAuthCallbackPage() {
   return (
     <main className={styles.callbackPage}>
       <div className={styles.callbackCard}>
-        {error ? <><h1>Sign-in failed</h1><p>{error}</p><a href="/login" className="btn btn-primary">Back to sign in</a></> : <><span className={styles.loadingMark} /><h1>Signing you in</h1><p>Finishing your secure Google sign-in…</p></>}
+        {error ? <><h1>Sign-in failed</h1><p>{error}</p><a href="/login" className="btn btn-primary">Back to sign in</a></> : <AppLoader label="Signing you in…" />}
       </div>
     </main>
   );

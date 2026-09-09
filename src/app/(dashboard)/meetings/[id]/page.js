@@ -1,4 +1,5 @@
 'use client';
+import AppLoader from '@/components/AppLoader';
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { formatDate, formatDurationLabel, meetingTypeInfo, getAvatarColor, getInitials } from '@/lib/utils';
@@ -13,7 +14,7 @@ export default function MeetingDetailPage({ params }) {
     fetch(`/api/meetings/${id}`).then(r => r.json()).then(d => setMeeting(d.meeting));
   }, [id]);
 
-  if (!meeting) return <div className={styles.page}><p className="text-muted">Loading...</p></div>;
+  if (!meeting) return <AppLoader label="Loading meeting…" />;
 
   const info = meetingTypeInfo(meeting.type);
 
